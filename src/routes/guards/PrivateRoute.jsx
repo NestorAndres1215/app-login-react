@@ -5,16 +5,9 @@ import { AuthContext } from "../../context/AuthContext";
 
 const PrivateRoute = ({ children }) => {
   const { user } = useContext(AuthContext);
-
-  console.log("🧩 [PrivateRoute] Renderizado");
-  console.log("🔑 Usuario en contexto:", user);
-
   if (!user) {
-    console.log("🚫 No hay usuario autenticado → redirigiendo a /login");
     return <Navigate to="/login" replace />;
   }
-
-  console.log("✅ Usuario autenticado → acceso permitido");
   return <>{children}</>;
 };
 

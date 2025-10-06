@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../services/authService";
 import { RegisterUser } from "../../models/RegisterUser";
-import Swal from "sweetalert2";
 import {
   Container,
   Box,
@@ -18,15 +17,12 @@ import {
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { showConfirm, showError } from "../../utils/alertMessages";
+import { registerInitialState } from "../../constants/registerInitialState"; // ✅ importación del estado inicial
 
 const Register = () => {
   const navigate = useNavigate();
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    roleName: "user",
-  });
+  const [form, setForm] = useState(registerInitialState); // ✅ uso del estado importado
 
   const handleChange = (e) =>
     setForm({
@@ -39,26 +35,11 @@ const Register = () => {
     try {
       const newUser = new RegisterUser(form);
       const response = await registerUser(newUser);
-      console.log("✅ Usuario registrado:", response);
 
-      Swal.fire({
-        icon: "success",
-        title: "Registro exitoso 🎉",
-        text: "Tu cuenta fue creada correctamente. Ahora puedes iniciar sesión.",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-
+      showConfirm("Registro exitoso 🎉", "Tu cuenta fue creada correctamente. Ahora puedes iniciar sesión.")
       navigate("/login");
     } catch (error) {
-      console.error(error.response?.data || error.message);
-      Swal.fire({
-        icon: "error",
-        title: "Error en el registro",
-        text:
-          error.response?.data?.message ||
-          "Ocurrió un error al registrar el usuario.",
-      });
+      showError("Error en el registro", "Ocurrió un error al registrar el usuario.")
     }
   };
 

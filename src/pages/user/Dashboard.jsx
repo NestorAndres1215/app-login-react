@@ -1,3 +1,4 @@
+// src/pages/user/Dashboard.jsx
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
@@ -18,27 +19,12 @@ import {
   faSignOutAlt,
   faCog,
 } from "@fortawesome/free-solid-svg-icons";
-import Swal from "sweetalert2";
+
+import { handleLogout } from "../../utils/alertMessages";
 
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-
-  const handleLogout = () => {
-    Swal.fire({
-      title: "¿Cerrar sesión?",
-      text: "Tu sesión se cerrará.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Sí, salir",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        logout();
-        navigate("/login");
-      }
-    });
-  };
 
   return (
     <Box sx={{ p: 4 }}>
@@ -62,7 +48,7 @@ const Dashboard = () => {
           variant="contained"
           color="error"
           startIcon={<FontAwesomeIcon icon={faSignOutAlt} />}
-          onClick={handleLogout}
+          onClick={() => handleLogout(logout, navigate)}
         >
           Cerrar sesión
         </Button>

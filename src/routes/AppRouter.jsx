@@ -5,8 +5,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Swal from "sweetalert2";
-
+import { ROLES } from "../constants/roles"; // Ajusta la ruta según tu proyecto
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Dashboard from "../pages/user/Dashboard";
@@ -21,15 +20,7 @@ const AppRouter = () => {
   // Redirección si el usuario ya está autenticado e intenta ir a login/register
   const handlePublicAccess = (component) => {
     if (user) {
-      Swal.fire({
-        icon: "info",
-        title: "Ya tienes una sesión activa",
-        text: "No necesitas volver a iniciar sesión.",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-      // Redirige según el rol
-      return user.roleName === "admin" ? (
+      return user.roleName === ROLES.ADMIN  ? (
         <Navigate to="/admin" replace />
       ) : (
         <Navigate to="/dashboard" replace />
@@ -47,7 +38,7 @@ const AppRouter = () => {
 
         {/* ===== RUTAS PRIVADAS ===== */}
         <Route
-          path="/dashboard"
+          path="/dashboard" 
           element={
             <PrivateRoute>
               <Dashboard />
@@ -59,7 +50,7 @@ const AppRouter = () => {
           path="/admin"
           element={
             <PrivateRoute>
-              <RoleGuard role="admin">
+              <RoleGuard role={ROLES.ADMIN}>
                 <AdminPanel />
               </RoleGuard>
             </PrivateRoute>
@@ -71,7 +62,7 @@ const AppRouter = () => {
           path="*"
           element={
             user ? (
-              user.roleName === "admin" ? (
+              user.roleName === ROLES.ADMIN ? (
                 <Navigate to="/admin" replace />
               ) : (
                 <Navigate to="/dashboard" replace />

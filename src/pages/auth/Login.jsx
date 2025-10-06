@@ -2,34 +2,11 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { loginUser } from "../../services/authService";
-
-// Material UI
-import {
-  Container,
-  Box,
-  TextField,
-  Button,
-  Typography,
-  CircularProgress,
-  Paper,
-  InputAdornment,
-  IconButton,
-  Link,
-} from "@mui/material";
-
-// SweetAlert2
-import Swal from "sweetalert2";
-
-// Font Awesome
+import { Container, Box, TextField, Button, Typography, CircularProgress, Paper, InputAdornment, IconButton, Link, } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUser,
-  faLock,
-  faSignInAlt,
-  faEye,
-  faEyeSlash,
-} from "@fortawesome/free-solid-svg-icons";
-
+import { faUser, faLock, faSignInAlt, faEye, faEyeSlash, } from "@fortawesome/free-solid-svg-icons";
+import { showError, showWarning, showSuccess } from "../../utils/alertMessages";
+import { ROLES } from "../../constants/roles"; // Ajusta la ruta
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
@@ -44,52 +21,41 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
+
+    if (!email.trim() || !password.trim()) {
+      showWarning("Campos Requeridos", "Por favor, ingresa tu correo y contraseña.")
+      return;
+    }
+    if (!password.trim()) {
+      showWarning("Contraseña requerida", "Por favor, ingresa tu contraseña.")
+      return;
+    }
     setLoading(true);
 
     try {
       const response = await loginUser({ email, password });
-      console.log("🔑 Respuesta backend:", response);
-
       const userData = response.data.user;
       const accessToken = response.data.accessToken;
 
       if (!userData || !accessToken) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Respuesta inválida del servidor",
-        });
+        showError("Error", "Respuesta inválida del servidor")
         return;
       }
-
       login({ ...userData, accessToken });
+      showSuccess("Bienvenido", `Hola ${userData.username}`);
 
-      Swal.fire({
-        icon: "success",
-        title: "Bienvenido",
-        text: `Hola ${userData.username}`,
-        timer: 1800,
-        showConfirmButton: false,
-      });
-
-      if (userData.role?.name === "ADMIN") {
-        console.log("🛠 Redirigiendo al panel ADMIN");
+      if (userData.role?.name === ROLES.ADMIN) {
         navigate("/admin");
-      } else {
-        console.log("🎬 Redirigiendo al DASHBOARD");
+      } else if (userData.role?.name === ROLES.USER) {
         navigate("/dashboard");
+      } else {
+        navigate("/login"); // fallback por seguridad
       }
     } catch (error) {
-      console.error(
-        "❌ Error al iniciar sesión:",
-        error.response?.data || error.message
-      );
-      Swal.fire({
-        icon: "error",
-        title: "Credenciales inválidas",
-        text: "Verifica tu email y contraseña",
-      });
+      console.log(error)
+      showError("Credenciales inválidas", "Verifica tu email y contraseña");
     } finally {
       setLoading(false);
     }

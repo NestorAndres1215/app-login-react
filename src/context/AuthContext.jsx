@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
         const parsedUser = JSON.parse(storedUser);
         setUser(parsedUser);
       } catch (error) {
-        console.error("❌ Error al parsear usuario del localStorage", error);
         localStorage.removeItem("user");
       }
     }
