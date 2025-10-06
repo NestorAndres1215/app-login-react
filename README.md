@@ -1,18 +1,38 @@
-# React + Vite
+# 🔐 Node Auth JWT MySQL + React Auth Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Sistema completo de autenticación con **Node.js**, **Express**, **JWT**, **MySQL** (con Sequelize) y un **frontend en React** con manejo de roles (USER / ADMIN).
 
-Currently, two official plugins are available:
+Permite **registro, inicio de sesión, cierre de sesión, protección de rutas y paneles separados** según el rol del usuario.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Características principales
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+✅ Backend con autenticación segura usando **JWT**  
+✅ Frontend con **React Context API** para el manejo del estado de autenticación  
+✅ Rutas protegidas (solo accesibles si el usuario está logueado)  
+✅ Redirección automática según rol (`admin` o `user`)  
+✅ Alerta informativa si el usuario intenta volver a `/login` o `/register` estando logueado  
+✅ Sistema escalable y modular con estructura limpia  
+✅ Manejo de errores y validaciones amigables  
 
-Note: This will impact Vite dev & build performances.
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Tecnologías utilizadas
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 🔹 Backend
+- Node.js
+- Express
+- JWT (jsonwebtoken)
+- MySQL + Sequelize ORM
+- dotenv
+- bcryptjs
+- cors
+
+### 🔹 Frontend
+- React (Vite o CRA)
+- React Router DOM v6
+- Material UI (MUI)
+- SweetAlert2
+- FontAwesome
+- Context API
